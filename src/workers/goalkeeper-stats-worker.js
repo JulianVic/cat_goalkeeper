@@ -2,6 +2,8 @@ let level = 1;
 const maxLevel = 50;
 
 self.addEventListener('message', function(e) {
+  console.log("si 1");
+  
   if (e.data === 'goal') {
     level = Math.min(level + 1, maxLevel);
     

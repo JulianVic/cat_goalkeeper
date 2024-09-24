@@ -9,6 +9,8 @@ function updateTime() {
 }
 
 self.addEventListener('message', function(e) {
+  console.log("si 2");
+  
   if (e.data === 'start') {
     if (!intervalId) {
       intervalId = setInterval(updateTime, 1000);

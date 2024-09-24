@@ -30,13 +30,13 @@ export class Game extends Phaser.Scene {
     }
 
     create() {
-        this.goalCorners = [
+        this.goalCorners = [ //ubicación de las esquinas de la portería
             { x: this.sys.game.config.width / 7.7, y: this.sys.game.config.height - 330 }, // esquina inferior izquierda
             { x: this.sys.game.config.width / 7.7, y: this.sys.game.config.height - 710 }, // esquina superior izquierda
             { x: this.sys.game.config.width - 250, y: this.sys.game.config.height - 710 }, // esquina superior derecha
             { x: this.sys.game.config.width - 250, y: this.sys.game.config.height - 330 }  // esquina inferior derecha
         ];
-    
+
         this.createBackground();
         this.createGoalkeeper();
         this.createBall();
@@ -44,7 +44,6 @@ export class Game extends Phaser.Scene {
         this.setupEventHandlers();
         this.setupWorkers();
     }
-    
     
     createBackground() {
         this.background = this.add.image(0, 0, "background");
@@ -75,26 +74,11 @@ export class Game extends Phaser.Scene {
     }
     
     setupEventHandlers() {
-        this.input.on('pointerdown', (pointer) => {
-            this.initializeAudioContext(); 
-            this.startDrawing(pointer); 
-        });
+        this.input.on('pointerdown', this.startDrawing, this);
         this.input.on('pointermove', this.drawLine, this);
         this.input.on('pointerup', this.shoot, this);
     }
-    
-    initializeAudioContext() {
-        if (!this.audioContext) {
-            this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            this.soundWorker.postMessage('start'); 
-        } else {
-            this.audioContext.resume().then(() => {
-                console.log('AudioContext resumed');
-                this.soundWorker.postMessage('start'); 
-            });
-        }
-    }
-    
+        
     setupWorkers() {
         this.goalkeeeperStatsWorker = new Worker('src/workers/goalkeeper-stats-worker.js');
         this.gameStatsWorker = new Worker('src/workers/game-stats-worker.js');
